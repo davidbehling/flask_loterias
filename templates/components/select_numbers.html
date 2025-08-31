@@ -1,0 +1,59 @@
+{% macro select_numbers_component(game, numbers_limited, min_max_to_game, selected_numbers=[]) %}
+
+<div id="numbers-container">
+  {% for number in range(1, numbers_limited[game] + 1) %}
+    <section class="sn_container">
+      <label>
+        <input type="checkbox"
+               name="selected_numbers[]"
+               value="{{ number }}"
+               {% if number|string in selected_numbers %}checked{% endif %}
+               onclick="teste_dd(this.value)"
+               />
+        <span></span>
+        <p>{{ number }}</p>
+      </label>
+    </section>
+  {% endfor %}
+</div>
+
+<script>
+  const minMaxPorJogo = JSON.parse(`{{ min_max_to_game | tojson | safe }}`);
+  const min = minMaxPorJogo[0]
+  const max = minMaxPorJogo[1]
+
+  var numbers_array = [];
+  
+  function teste_dd(value) {    
+    if (numbers_array.includes(value)) {
+      const index = numbers_array.indexOf(value);
+      if (index > -1) {
+        numbers_array.splice(index, 1); // só remove do array original
+        abilit_Checked() ;
+      }
+    } else {
+      if (numbers_array.length == max) return;
+
+      numbers_array.push(value);
+      
+      if (numbers_array.length == max) disabled_checked();
+    }
+
+    selected_numbers = numbers_array
+  }
+
+  function disabled_checked() {
+    document.querySelectorAll('input[type="checkbox"]:not(:checked)').forEach(input => {
+      input.disabled = true;
+    });
+  }
+
+  function abilit_Checked() {
+    document.querySelectorAll('input[type="checkbox"]:disabled').forEach(input => {
+      input.disabled = false;
+    });
+  }
+
+</script>
+
+{% endmacro %}

@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+
+{% import 'components/table_drawn_numbers.html' as tabela %}
+
+{% block title %}Aba 1 - Números Sorteados{% endblock %}
+
+{% block content %}
+  <h2>Números Sorteados</h2>
+
+  <!-- Formulário com opções de rádio -->
+  <form method="POST" id="game-form">
+    <div style="margin-top: 7px;">
+      <label for="qtde">Modalidade:</label>
+      <select name="jogo" onchange="document.getElementById('game-form').submit()">
+        {% for jogo in games %}
+          <option value="{{ jogo }}" {% if game_selected == jogo %}selected{% endif %}>
+            {{ jogo }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+  </form> 
+  <div style="margin-top: 7px;">
+    {% if drawn_numbers %} 
+      {{ tabela.render_tabela_sorteios(drawn_numbers) }}
+    {% endif %}
+  </div>
+  
+{% endblock %}

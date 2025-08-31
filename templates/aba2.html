@@ -1,0 +1,83 @@
+{% extends "index.html" %}
+
+{% import 'components/table_macros.html' as tabela %}
+
+{% block title %}Aba 2 - Gerar Números Aleatórios{% endblock %}
+
+{% block content %}
+  <h2>Gerar Números Aleatórios</h2>
+
+  <form method="POST">
+    <div style="margin-top: 7px;">
+      <label for="qtde">Modalidade:</label>
+      <select name="jogo" onchange="updateQtdeOptions(this.value)">
+        {% for jogo in games %}
+          <option value="{{ jogo }}" {% if game_selected == jogo %}selected{% endif %}>
+            {{ jogo }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div style="margin-top: 7px;">
+      <label for="qtde">Quantidade de números:</label>
+      <select name="qtde" id="qtde-select"></select>
+    </div>
+
+    <div style="margin-top: 7px;">
+      <label for="generator">Tipo de gerador:</label>
+      <select name="generator" id="generator">
+        {% for value, label in generators %}
+          <option value="{{ value }}" {% if generator_selected == value %}selected{% endif %}>
+            {{ label }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    </br>
+    <button type="submit" style="margin-top: 5px;">Gerar número aleatório</button>
+  </form>
+  
+  {% if generate_numbers %}
+    <h2>Números gerados:</h2>
+    <p>{{ generate_numbers }}</p>
+    <h2>Resultados</h2>
+    {{ tabela.render_tabela(sorteios) }}
+  {% endif %}
+  
+  <script>
+    const minMaxPorJogo = JSON.parse(`{{ min_max_to_game | tojson | safe }}`);
+  
+    function updateQtdeOptions(jogoSelecionado) {
+      const select = document.getElementById("qtde-select");
+      const [min, max] = minMaxPorJogo[jogoSelecionado];
+  
+      // Limpa opções anteriores
+      select.innerHTML = "";
+  
+      for (let i = min; i <= max; i++) {
+        const opt = document.createElement("option");
+        opt.value = i;
+        opt.text = i;
+        select.appendChild(opt);
+      }
+    }
+  
+    // Inicializa no carregamento da página
+    window.onload = () => {
+      const gameStart = "{{ game_selected }}";
+      const qtdeNumbers = parseInt("{{ qtde_numbers }}");
+      updateQtdeOptions(gameStart);
+  
+      // Seleciona a quantidade previamente selecionada
+      const select = document.getElementById("qtde-select");
+      for (let option of select.options) {
+        if (parseInt(option.value) === qtdeNumbers) {
+          option.selected = true;
+          break;
+        }
+      }
+    };
+  </script>
+  
+{% endblock %}

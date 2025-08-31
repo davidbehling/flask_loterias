@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Minha Página{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="sidebar">
+    <a href="{{ url_for('aba1.aba1') }}" class="tab {% if active_tab == 'aba1' %}active{% endif %}">Números Sorteados</a>
+    <a href="{{ url_for('aba2.aba2') }}" class="tab {% if active_tab == 'aba2' %}active{% endif %}">Gerar Números</a>
+    <a href="{{ url_for('aba3.aba3') }}" class="tab {% if active_tab == 'aba3' %}active{% endif %}">Escolher Números</a>
+  </div>
+  <div class="content">
+    {% block content %}{% endblock %}
+  </div>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

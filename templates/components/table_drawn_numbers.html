@@ -1,0 +1,42 @@
+{% macro render_tabela_sorteios(sorteios) %}
+
+<style>
+  .thead_date {
+    width: 175px;
+  }
+
+  .thead_number {
+    width: 200px;
+  }
+
+  .thead_number_draw {
+    width: 400px;
+  }
+</style>
+
+<div class="table-wrapper">
+  <table id="sorteioTable">
+    <thead>
+      <tr>
+        <th class="thead_date" onclick="ordenar(0)">Data &#x2B0D;</th>
+        <th class="thead_number" onclick="ordenar(1)">Número de Sorteio &#x2B0D;</th>
+        <th class="thead_number_draw">Bolas Sorteadas</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in sorteios %}
+      <tr>
+        <td>{{ s.data.strftime('%d/%m/%Y') }}</td>
+        <td>{{ s.numero }}</td>
+        <td>
+        {% for bola in s.bolas_sorteadas %}
+          <span>{{ bola }},</span>
+        {% endfor %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endmacro %}

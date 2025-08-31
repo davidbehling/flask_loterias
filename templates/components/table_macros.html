@@ -1,0 +1,37 @@
+{% macro render_tabela(sorteios) %}
+
+<div class="table-wrapper">
+  <table id="sorteioTable">
+      <thead>
+          <tr>
+              <th onclick="ordenar(0)">Data &#x2B0D;</th>
+              <th onclick="ordenar(1)">Número de Sorteio &#x2B0D;</th>
+              <th>Bolas Sorteadas</th>
+              <th>Bolas Acertadas</th>
+              <th onclick="ordenar(4)">Pontuação &#x2B0D;</th>
+          </tr>
+      </thead>
+      <tbody>
+          {% for s in sorteios %}
+          <tr>
+              <td>{{ s.data.strftime('%d/%m/%Y') }}</td>
+              <td>{{ s.numero }}</td>
+              <td>
+              {% for bola in s.bolas_sorteadas %}
+                {% if bola in s.bolas_acertadas %}
+                  <span style="color: green; font-weight: bold;">{{ bola }}</span>
+                {% else %}
+                  <span>{{ bola }}</span>
+                {% endif %}
+                {% if not loop.last %}, {% endif %}
+              {% endfor %}
+              </td>
+              <td>{{ s.bolas_acertadas | join(', ') }}</td>
+              <td>{{ s.pontuacao }}</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+</div>
+
+{% endmacro %}
